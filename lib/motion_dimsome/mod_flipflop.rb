@@ -1,12 +1,12 @@
 ### for now, JUST add relative -y methods for rubymotion ios!!!
+
 module Dimsome
-	# down is up, up is down
-	
-	# ios flop y
+	# ios, flop y: down is up, up is down
 	module FlipFlopPointIOS
 		def upi(amount) down(amount) end
 		def downi(amount) up(amount) end
 	end
+	
 	module FlipFlopRectIOS
 		# accessors??? used internally???
 		# move
@@ -32,7 +32,7 @@ module Dimsome
 # 		def center_lefti(offset=nil) center_left(offset) end
 	end
 	
-	# osx leave it
+	# osx, leave it
 	module FlipFlopPointOSX
 		def upi(amount) up(amount) end
 		def downi(amount) down(amount) end
@@ -60,7 +60,6 @@ module Dimsome
 		def bottom_centeri(offset=nil) bottom_center(offset) end
 		def bottom_lefti(offset=nil) bottom_left(offset) end
 # 		def center_lefti(offset=nil) center_left(offset) end
-
 	end
 
 	# add stub -y methods for all others, for all -y coding??? but that wd be -x!!! bah.

@@ -4,15 +4,9 @@ module Dimsome
 		### expect #std returning standardized copy of rect!!!
 		
 		# Getters/setters -- non-equals form given an arg is a setter, to enable chaining
-		# from geom-plus, consider opts!!! FIXME!!!
-	
-		#use make() to standardize size????
-
-		### what about class methods???
-# 		def self.empty() self.make(0, 0, 0, 0) end
 	
 		# shd we have origin(value=nil), size(value=nil) for balance???
-		# not if we're CGRect, already has it!!! Android??? Other ruby???
+		# not if we're CGRect, already has it!!! Other ruby??? Android???
 
 		### rect getters implementation must NOT use the rect getters but rather 
 		# origin/size getters to avoid std() looping!!! duh.
@@ -20,24 +14,19 @@ module Dimsome
 		def x=(value) self.origin.x = value end
 		def x(value=nil)
 			return min_x unless value
-			self.class.new([value, self.origin.y], self.size)
-	#   	x, y, w, h = to_quad
-	#   	self.class.new([[value, y], [w, h]])
-	#   	self.class.new([[value, self.origin.y], self.size.to_ary])
-			# make() better bc CGSize???
-	# 		rect = CGRect.new([value, self.origin.y], self.size)
+			self.class.make([value, self.origin.y], self.size)
 		end
 
 		def y=(value) self.origin.y = value end
 		def y(value=nil)
 			return min_y unless value
-			self.class.new([self.origin.x, value], self.size)
+			self.class.make([self.origin.x, value], self.size)
 		end
 
 		def w=(value) self.size.w = value end
 		def w(value=nil)
 			return self.std.size.w unless value
-			self.class.new(self.origin, [value, self.size.h])
+			self.class.make(self.origin, [value, self.size.h])
 		end
 		alias_method :width=, :w=
 		alias_method :width, :w
@@ -45,7 +34,7 @@ module Dimsome
 		def h=(value) self.size.h = value end
 		def h(value=nil)
 			return self.std.size.h unless value
-			self.class.new(self.origin, [self.size.w, value])
+			self.class.make(self.origin, [self.size.w, value])
 		end
 		alias_method :height=, :h=
 		alias_method :height, :h

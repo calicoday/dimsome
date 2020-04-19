@@ -1,10 +1,5 @@
 module Dimsome
 	module ModRectGrip  
-		### Point locations within rect.
-		# Waypoint is a point some way into the rect, ie origin + spread * width, height.
-		# Spread is a unit vector, where nil means an axis to be ignored or left unmodified.
-		# Grip is a named, preset waypoint.
-		##### NOPE now
 		# Spread is a unit vector, where nil means an axis will be ignored or left unmodified.
 		# Waypoint is a point some way into the rect, ie [width, height] * (named_)spread
 		# 	(geomotion relative position). useful as a delta or offset???
@@ -27,10 +22,6 @@ module Dimsome
 			when :right, :leftward then [1.0, nil]
 			when :top, :downward then [nil, 1.0]
 			when :bottom, :upward then [nil, 0.0]		
-# 			when :left then [0.0, nil]
-# 			when :right then [1.0, nil]
-# 			when :top then [nil, 1.0]
-# 			when :bottom then [nil, 0.0]		
 			else
 # 				puts "named_spread unknown name: #{name.inspect}"
 # 				[nil, nil] # fail silently??? ### [0, 0]???
@@ -61,7 +52,7 @@ module Dimsome
 			###self.move(delta)
 # 			self.move(base.grip(base_spread) - self.size * fly_spread + offset)
 			#eg resize:
-# 			self.class.new([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
+# 			self.class.make([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
 # 				self.origin.y - (spread[1] || 1) * (pair[1] || 0)], 
 # 				sized)
 		end
@@ -96,10 +87,9 @@ module Dimsome
 			[baseclass, args_arr]
 		end
 ###	
-		# fix_grip_offset
+
 		def fix_offset(offset, opname)
 			return [0.0, 0.0] unless offset
-# 			return origin.to_ary if offset == true
 			raise_cannot_op(opname, offset) unless pair = numeric_pair(offset)
 			pair
 		end
@@ -116,11 +106,12 @@ module Dimsome
 # 			puts "\n=== v_way spread: #{spread.inspect}, offset: #{offset_pair.inspect}"
 			w, h = size.to_ary
 			### try ignoring w or h on nil... nope put it back for now...
-# 			origin.class.new((offset_pair[0] || 0) + (spread[0] || 0) * w, 
+# 			origin.class.make((offset_pair[0] || 0) + (spread[0] || 0) * w, 
 # 				(offset_pair[1] || 0) + (spread[1] || 0) * h)
-			origin.class.new((offset_pair[0] || 0) + (spread[0] || 1) * w, 
+			origin.class.make((offset_pair[0] || 0) + (spread[0] || 1) * w, 
 				(offset_pair[1] || 0) + (spread[1] || 1) * h)
 		end	
+		
 # 		def grip(name_or_spread, offset=nil, callee=nil) 
 		def grip(*args) 
 			name_or_spread = args.shift
@@ -138,10 +129,10 @@ module Dimsome
 			
 			vetted_grip(spread, fix_offset(offset, __callee__)) 
 		end
+		
 		def vetted_grip(spread, offset_pair)
 # 		puts "  === got: #{vetted_waypoint(spread, offset_pair)}, origin: #{origin.inspect}"
 			vetted_waypoint(spread, offset_pair) + origin
-# 			vetted_waypoint(spread, offset_pair) + origin
 		end	
 
 		### __callee__ spelt diff ruby/rubymotion, eg :center vs center:

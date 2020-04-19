@@ -57,6 +57,9 @@ $ bundle exec rake spec
 
 just the whirlwind_spec 'no superpowers'.
 
+same for $test_cg_dims = false
+200 specifications (225 requirements), 1 failures, 0 errors
+
 
 ### Results for IOS
 
@@ -67,6 +70,9 @@ $ ios=true bundle exec rake spec
 ```
 
 just the whirlwind_spec 'no superpowers'.
+
+same for $test_cg_dims = false
+200 specifications (225 requirements), 1 failures, 0 errors
 
 
 ## RubyMotion and Porkbelly

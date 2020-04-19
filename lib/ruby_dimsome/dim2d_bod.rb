@@ -1,5 +1,4 @@
 module Dimsome
-
 	class RubyDim2d
 		include Dim2d
 		include ModUtil::Pair
@@ -11,8 +10,7 @@ module Dimsome
 		alias_method :to_ary, :pair
 		alias_method :to_a, :pair
 	
-		def dup() self.class.new(*arr) end
-	# 	def dup() self.class.new(self) end ###???
+		def dup() self.class.make(*arr) end
 
 		def charge
 			[arr[0] == 0 ? 0 : (arr[0] > 0 ? 1 : -1),
@@ -21,7 +19,7 @@ module Dimsome
 	# 			arr[1] == 0 ? 0 : arr[1]/arr[1].abs]
 		end
 
-		def self.make(*args) self.new(*args) end ### fix args!!! FIXME!!!
+		def self.make(*args) self.new(*args) end
 
 		def initialize(one=nil, two=nil)
 			pair = (one ? 
@@ -32,7 +30,6 @@ module Dimsome
 		end
 
 		def self.empty() self.new(0, 0) end
-# 		def self.empty() self.class.new(0, 0) end
 # 		def empty?() arr[0] == 0 && arr[1] == 0 end
 	# 	alias_method :zero, :empty
 		def self.zero() self.empty end

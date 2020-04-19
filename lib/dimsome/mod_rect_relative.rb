@@ -2,14 +2,6 @@ module Dimsome
 	module ModRectRelative
 		# Create rect with same size, adjusted position
 	
-		#nope not useful here!!!
-	#   def method_missing(m, *args, &b)
-	#   	case m
-	#   	when :left, :right, :up, :down then origin.send(m, args, &b) 
-	#   	end
-	#   end
-	#   # respond_to_missing...???
-
 		### NOTE if you want to pass a num_pair not scalar use move/resize not left/grow/wider
 		### specialized methods only take scalar!!!
 
@@ -18,7 +10,7 @@ module Dimsome
 			vetted_move(pair)
 		end
 		def vetted_move(pair)
-			self.class.new(pair, size.to_ary)
+			self.class.make(pair, size.to_ary)
 		end
 
 		#### let amount be pair, poss nil, eg [v, nil]??? ###FIXME!!!
@@ -57,33 +49,21 @@ module Dimsome
 		def fix_resize_args(amount, spread, opname)
 			raise_cannot_op(opname, amount) unless amount.is_a?(Numeric)
 			raise_cannot_op(opname, spread, '(bad spread)') if spread && !spread?(spread)
-# 			raise_cannot_op(opname, spread) unless spread && spread?(spread)
-	#   	spread = [0.0, 0.0] unless spread
 			spread ? spread : [0.0, 0.0]
 		end
 	
 		def resize(other, spread=nil)
 			raise_cannot_op('resize', other) unless pair = numeric_pair(other)
 			raise_cannot_op(opname, spread, '(bad spread)') if spread && !spread?(spread)
-#			raise_cannot_op('resize', spread) unless spread && spread?(spread)
 			vetted_resize(pair, spread)
 		end
-		#???
-# 		def vetted_resize!(pair, spread)
-# 			self.x = self.x - (spread[0] || 1) * (pair[0] || 0)
-# 			self.y = self.y - (spread[1] || 1) * (pair[1] || 0)
-# 			self.w = self.w + (pair[0] || 0)
-# 			self.h = self.h + (pair[1] || 0)
-# 		end
+
 		# use origin.y not rect conv y() to avoid min/max problems for flipflop!!! FIXME!!!
 		def vetted_resize(pair, spread)
 			sized = size.vetted_add(pair)
-			self.class.new([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
+			self.class.make([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
 				self.origin.y - (spread[1] || 1) * (pair[1] || 0)], 
 				sized)
-# 			self.class.new([self.x - (spread[0] || 1) * (pair[0] || 0), 
-# 				self.y - (spread[1] || 1) * (pair[1] || 0)], 
-# 				sized)
 		end
 	
 		### grow/shrink amount to EACH side!!!
@@ -110,7 +90,6 @@ module Dimsome
 			vetted_resize([-amount, -amount], fix_resize_args(amount, spread, __callee__))
 		end
 
-		# tmp are geom specs centered or no??? FIXME!!!
 		def wider(amount, spread=nil) 
 # 			amount += amount
 # 			spread = [0.5, 0.5] unless spread #???
@@ -121,8 +100,8 @@ module Dimsome
 # 			spread = [0.5, 0.5] unless spread #???
 			vetted_resize([-amount, nil], fix_resize_args(amount, spread, __callee__))
 		end
-	#   alias_method :thinner, :narrower
-	#   alias_method :thicker, :wider
+	  alias_method :thinner, :narrower
+	  alias_method :thicker, :wider
 		def taller(amount, spread=nil) 
 			vetted_resize([nil, amount], fix_resize_args(amount, spread, __callee__))
 		end
@@ -186,13 +165,12 @@ module Dimsome
 		# use grip names as directions
 		# align pair and offset/padding pair!!!
 		def inside(align=nil, offset=nil) ###*args!!!
-		
-		
 		end
 	# 	def outside(align=nil, further=nil)
 		def outside(*args)
 			align, args = HandyArgs.pull_first_object(Symbol, args)
 			align = center unless align
+			# blah blah blah
 		end
 	
 	

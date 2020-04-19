@@ -39,7 +39,7 @@ module Dimsome
 			# @example 
 			#   numeric_pair(3) #=> [3, 3]
 			#   numeric_pair([3, nil]) #=> [3, nil]
-			#   numeric_pair(Point.new(4, 5)) #=> [4, 5]
+			#   numeric_pair(Point.make(4, 5)) #=> [4, 5]
 			#   numeric_pair("some string") #=> nil
 			#
 			# @param other [Numeric, Array, numpairable] a single Numeric or an object that
@@ -61,7 +61,7 @@ module Dimsome
 			# @example 
 			#   numeric_pair(3) #=> [3, 3]
 			#   numeric_pair([3, nil]) #=> nil # This example differs!
-			#   numeric_pair(Point.new(4, 5)) #=> [4, 5]
+			#   numeric_pair(Point.make(4, 5)) #=> [4, 5]
 			#   numeric_pair("some string") #=> nil
 			#
 			# @param other [Numeric, Array, numpairable] a single Numeric or an object that
@@ -81,14 +81,12 @@ module Dimsome
 					return nil unless args[0].respond_to?(:to_ary)
 					quad = args[0].to_ary[0..3]
 				end
-				# strict_numeric_pair is instance method!!! FIXME!!!
 				one = strict_numeric_pair(quad ? [quad[0], quad[1]] : args[0])
 				two = strict_numeric_pair(quad ? [quad[2], quad[3]] : args[1])
 				return nil unless one && two
 				[one, two]
 			end
-
-		end #module Core
+		end 
 		
 		# Utility methods for Dimsome 2-value Pair classes, ie Dim2d, Point, Size
 		module Pair
@@ -99,17 +97,14 @@ module Dimsome
 				"#{self.class.name}(#{a[0]}, #{a[1]})"
 			end
 			alias_method :to_s, :inspect
+			
 			### TMP!!! Float#round can't take arg!!! FIXME!!!
 			def insp(digits=0)
-				# chop Dimsome:: from name??? FIXME!!!
 				a = to_ary
 				name = self.class.name.split(':').last
 				"#{name}~(#{a[0].round}, #{a[1].round})"
-# 				"#{self.class.name}~(#{a[0].round}, #{a[1].round})"
-		#     "#{self.class.name}~(#{arr[0].round(digits)}, #{arr[1].round(digits)})"
 			end
-
-		end #module Pair
+		end 
 
 		# Utility methods for Dimsome 4-value Rect classes
 		module Rect
@@ -121,16 +116,16 @@ module Dimsome
 				"#{self.class.name}([#{x}, #{y}], [#{w}, #{h}])"
 			end
 			alias_method :to_s, :inspect
+			
 			### TMP!!! Float#round can't take arg!!! FIXME!!!
 			def insp(digits=0)
 				x, y, w, h = to_quad
 				name = self.class.name.split(':').last
 				"#{name}~([#{x.round}, #{y.round}], [#{w.round}, #{h.round}])"
-# 				"#{self.class.name}~([#{x.round}, #{y.round}], [#{w.round}, #{h.round}])"
 			end
-		end #module Rect
-	end #module ModUtil
-end #module Dimsome
+		end
+	end
+end
 
 module Dimsome
 	module ModArith
@@ -144,15 +139,11 @@ module Dimsome
 
 		def -@
 			a = to_ary
-			self.class.new(-a[0], -a[1])
+			self.class.make(-a[0], -a[1])
 		end
 
 		def compose(delta, orient=[1,1])
 			(self + delta) * orient
-	# 		b = self + delta
-	# 		self.class.new(b[0] * orient[0], b[1] * orient[1])
-	# 		a = to_ary
-	# 		self.class.new(a[0] + add[0]
 		end
 
 		# for subclasses
@@ -161,11 +152,11 @@ module Dimsome
 		
 		def vetted_add(pair)
 			a = to_ary
-			self.class.new(a[0] + (pair[0] || 0), a[1] + (pair[1] || 0))
+			self.class.make(a[0] + (pair[0] || 0), a[1] + (pair[1] || 0))
 		end
 		def vetted_multiply(pair)
 			a = to_ary
-			self.class.new(a[0] * (pair[0] || 1), a[1] * (pair[1] || 1))
+			self.class.make(a[0] * (pair[0] || 1), a[1] * (pair[1] || 1))
 		end
 		def vetted_divide(pair)
 			### yard doc needs comment INSIDE def to ignore it!!!
@@ -174,11 +165,11 @@ module Dimsome
 			# errors result in too many errors
 			### ensure fdiv!!! FIXME!!!
 			a = to_ary
-			self.class.new(a[0] * 1.0 / (pair[0] || 1), a[1] * 1.0 / (pair[1] || 1))
+			self.class.make(a[0] * 1.0 / (pair[0] || 1), a[1] * 1.0 / (pair[1] || 1))
 		end
 		def vetted_subtract(pair)
 			a = to_ary
-			self.class.new(a[0] - (pair[0] || 0), a[1] - (pair[1] || 0))
+			self.class.make(a[0] - (pair[0] || 0), a[1] - (pair[1] || 0))
 		end
 		
 		def +(other)
@@ -212,14 +203,14 @@ module Dimsome
 
 		def abs() 
 			a = to_ary
-			self.class.new(a[0].abs, a[1].abs) 
+			self.class.make(a[0].abs, a[1].abs) 
 		end
 	
 		### TMP!!! Float#round can't take arg!!! FIXME!!!
 		def round(digits=0)
 			a = to_ary
-			self.class.new(a[0].round, a[1].round)
-	#     self.class.new(a[0].round(digits), a[1].round(digits))
+			self.class.make(a[0].round, a[1].round)
+	#     self.class.make(a[0].round(digits), a[1].round(digits))
 		end
 
 		def rough_diagonal
@@ -238,31 +229,13 @@ module Dimsome
 
 		def angle_to(other) (self - other).angle end
 
-		### phrase this differently???
-	#   def inside?(rect)
-	#     CGRectContainsPoint(rect, self)
-	#   end
-
-		# was really length_to_within?
-		#def within?(any_numeric_pair) ???
-		def within_radius?(radius) # do - then call this???
+		def within_radius?(radius)
 			a = to_ary
 			return rough_diagonal <= radius**2 if a[0].abs <= radius && a[1].abs <= radius
-# 			return rough_length <= radius**2 if a[0].abs <= radius && a[1].abs <= radius
 			false
 		end
-	#   def length_within?(radius, point)
-	# #   def distance_within?(radius, to: point)
-	#     dx = self.x - point.x
-	#     dy = self.y - point.y
-	#     if dx.abs <= radius && dy.abs <= radius
-	#       return rough_distance_to(point) <= radius**2
-	#     end
-	#     return false
-	#   end
-	
-	end #module ModArith
-end #module Dimsome
+	end 
+end 
 
 module Dimsome
 	module ModPoint
@@ -290,14 +263,6 @@ module Dimsome
 	module ModRectRelative
 		# Create rect with same size, adjusted position
 	
-		#nope not useful here!!!
-	#   def method_missing(m, *args, &b)
-	#   	case m
-	#   	when :left, :right, :up, :down then origin.send(m, args, &b) 
-	#   	end
-	#   end
-	#   # respond_to_missing...???
-
 		### NOTE if you want to pass a num_pair not scalar use move/resize not left/grow/wider
 		### specialized methods only take scalar!!!
 
@@ -306,7 +271,7 @@ module Dimsome
 			vetted_move(pair)
 		end
 		def vetted_move(pair)
-			self.class.new(pair, size.to_ary)
+			self.class.make(pair, size.to_ary)
 		end
 
 		#### let amount be pair, poss nil, eg [v, nil]??? ###FIXME!!!
@@ -345,33 +310,21 @@ module Dimsome
 		def fix_resize_args(amount, spread, opname)
 			raise_cannot_op(opname, amount) unless amount.is_a?(Numeric)
 			raise_cannot_op(opname, spread, '(bad spread)') if spread && !spread?(spread)
-# 			raise_cannot_op(opname, spread) unless spread && spread?(spread)
-	#   	spread = [0.0, 0.0] unless spread
 			spread ? spread : [0.0, 0.0]
 		end
 	
 		def resize(other, spread=nil)
 			raise_cannot_op('resize', other) unless pair = numeric_pair(other)
 			raise_cannot_op(opname, spread, '(bad spread)') if spread && !spread?(spread)
-#			raise_cannot_op('resize', spread) unless spread && spread?(spread)
 			vetted_resize(pair, spread)
 		end
-		#???
-# 		def vetted_resize!(pair, spread)
-# 			self.x = self.x - (spread[0] || 1) * (pair[0] || 0)
-# 			self.y = self.y - (spread[1] || 1) * (pair[1] || 0)
-# 			self.w = self.w + (pair[0] || 0)
-# 			self.h = self.h + (pair[1] || 0)
-# 		end
+
 		# use origin.y not rect conv y() to avoid min/max problems for flipflop!!! FIXME!!!
 		def vetted_resize(pair, spread)
 			sized = size.vetted_add(pair)
-			self.class.new([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
+			self.class.make([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
 				self.origin.y - (spread[1] || 1) * (pair[1] || 0)], 
 				sized)
-# 			self.class.new([self.x - (spread[0] || 1) * (pair[0] || 0), 
-# 				self.y - (spread[1] || 1) * (pair[1] || 0)], 
-# 				sized)
 		end
 	
 		### grow/shrink amount to EACH side!!!
@@ -398,7 +351,6 @@ module Dimsome
 			vetted_resize([-amount, -amount], fix_resize_args(amount, spread, __callee__))
 		end
 
-		# tmp are geom specs centered or no??? FIXME!!!
 		def wider(amount, spread=nil) 
 # 			amount += amount
 # 			spread = [0.5, 0.5] unless spread #???
@@ -409,8 +361,8 @@ module Dimsome
 # 			spread = [0.5, 0.5] unless spread #???
 			vetted_resize([-amount, nil], fix_resize_args(amount, spread, __callee__))
 		end
-	#   alias_method :thinner, :narrower
-	#   alias_method :thicker, :wider
+	  alias_method :thinner, :narrower
+	  alias_method :thicker, :wider
 		def taller(amount, spread=nil) 
 			vetted_resize([nil, amount], fix_resize_args(amount, spread, __callee__))
 		end
@@ -474,13 +426,12 @@ module Dimsome
 		# use grip names as directions
 		# align pair and offset/padding pair!!!
 		def inside(align=nil, offset=nil) ###*args!!!
-		
-		
 		end
 	# 	def outside(align=nil, further=nil)
 		def outside(*args)
 			align, args = HandyArgs.pull_first_object(Symbol, args)
 			align = center unless align
+			# blah blah blah
 		end
 	
 	
@@ -489,11 +440,6 @@ end
 
 module Dimsome
 	module ModRectGrip  
-		### Point locations within rect.
-		# Waypoint is a point some way into the rect, ie origin + spread * width, height.
-		# Spread is a unit vector, where nil means an axis to be ignored or left unmodified.
-		# Grip is a named, preset waypoint.
-		##### NOPE now
 		# Spread is a unit vector, where nil means an axis will be ignored or left unmodified.
 		# Waypoint is a point some way into the rect, ie [width, height] * (named_)spread
 		# 	(geomotion relative position). useful as a delta or offset???
@@ -516,10 +462,6 @@ module Dimsome
 			when :right, :leftward then [1.0, nil]
 			when :top, :downward then [nil, 1.0]
 			when :bottom, :upward then [nil, 0.0]		
-# 			when :left then [0.0, nil]
-# 			when :right then [1.0, nil]
-# 			when :top then [nil, 1.0]
-# 			when :bottom then [nil, 0.0]		
 			else
 # 				puts "named_spread unknown name: #{name.inspect}"
 # 				[nil, nil] # fail silently??? ### [0, 0]???
@@ -550,7 +492,7 @@ module Dimsome
 			###self.move(delta)
 # 			self.move(base.grip(base_spread) - self.size * fly_spread + offset)
 			#eg resize:
-# 			self.class.new([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
+# 			self.class.make([self.origin.x - (spread[0] || 1) * (pair[0] || 0), 
 # 				self.origin.y - (spread[1] || 1) * (pair[1] || 0)], 
 # 				sized)
 		end
@@ -585,10 +527,9 @@ module Dimsome
 			[baseclass, args_arr]
 		end
 ###	
-		# fix_grip_offset
+
 		def fix_offset(offset, opname)
 			return [0.0, 0.0] unless offset
-# 			return origin.to_ary if offset == true
 			raise_cannot_op(opname, offset) unless pair = numeric_pair(offset)
 			pair
 		end
@@ -605,11 +546,12 @@ module Dimsome
 # 			puts "\n=== v_way spread: #{spread.inspect}, offset: #{offset_pair.inspect}"
 			w, h = size.to_ary
 			### try ignoring w or h on nil... nope put it back for now...
-# 			origin.class.new((offset_pair[0] || 0) + (spread[0] || 0) * w, 
+# 			origin.class.make((offset_pair[0] || 0) + (spread[0] || 0) * w, 
 # 				(offset_pair[1] || 0) + (spread[1] || 0) * h)
-			origin.class.new((offset_pair[0] || 0) + (spread[0] || 1) * w, 
+			origin.class.make((offset_pair[0] || 0) + (spread[0] || 1) * w, 
 				(offset_pair[1] || 0) + (spread[1] || 1) * h)
 		end	
+		
 # 		def grip(name_or_spread, offset=nil, callee=nil) 
 		def grip(*args) 
 			name_or_spread = args.shift
@@ -627,10 +569,10 @@ module Dimsome
 			
 			vetted_grip(spread, fix_offset(offset, __callee__)) 
 		end
+		
 		def vetted_grip(spread, offset_pair)
 # 		puts "  === got: #{vetted_waypoint(spread, offset_pair)}, origin: #{origin.inspect}"
 			vetted_waypoint(spread, offset_pair) + origin
-# 			vetted_waypoint(spread, offset_pair) + origin
 		end	
 
 		### __callee__ spelt diff ruby/rubymotion, eg :center vs center:
@@ -671,15 +613,9 @@ module Dimsome
 		### expect #std returning standardized copy of rect!!!
 		
 		# Getters/setters -- non-equals form given an arg is a setter, to enable chaining
-		# from geom-plus, consider opts!!! FIXME!!!
-	
-		#use make() to standardize size????
-
-		### what about class methods???
-# 		def self.empty() self.make(0, 0, 0, 0) end
 	
 		# shd we have origin(value=nil), size(value=nil) for balance???
-		# not if we're CGRect, already has it!!! Android??? Other ruby???
+		# not if we're CGRect, already has it!!! Other ruby??? Android???
 
 		### rect getters implementation must NOT use the rect getters but rather 
 		# origin/size getters to avoid std() looping!!! duh.
@@ -687,24 +623,19 @@ module Dimsome
 		def x=(value) self.origin.x = value end
 		def x(value=nil)
 			return min_x unless value
-			self.class.new([value, self.origin.y], self.size)
-	#   	x, y, w, h = to_quad
-	#   	self.class.new([[value, y], [w, h]])
-	#   	self.class.new([[value, self.origin.y], self.size.to_ary])
-			# make() better bc CGSize???
-	# 		rect = CGRect.new([value, self.origin.y], self.size)
+			self.class.make([value, self.origin.y], self.size)
 		end
 
 		def y=(value) self.origin.y = value end
 		def y(value=nil)
 			return min_y unless value
-			self.class.new([self.origin.x, value], self.size)
+			self.class.make([self.origin.x, value], self.size)
 		end
 
 		def w=(value) self.size.w = value end
 		def w(value=nil)
 			return self.std.size.w unless value
-			self.class.new(self.origin, [value, self.size.h])
+			self.class.make(self.origin, [value, self.size.h])
 		end
 		alias_method :width=, :w=
 		alias_method :width, :w
@@ -712,7 +643,7 @@ module Dimsome
 		def h=(value) self.size.h = value end
 		def h(value=nil)
 			return self.std.size.h unless value
-			self.class.new(self.origin, [self.size.w, value])
+			self.class.make(self.origin, [self.size.w, value])
 		end
 		alias_method :height=, :h=
 		alias_method :height, :h
@@ -940,7 +871,6 @@ module Dimsome
 end
 
 module Dimsome
-
 	class RubyDim2d
 		include Dim2d
 		include ModUtil::Pair
@@ -952,8 +882,7 @@ module Dimsome
 		alias_method :to_ary, :pair
 		alias_method :to_a, :pair
 	
-		def dup() self.class.new(*arr) end
-	# 	def dup() self.class.new(self) end ###???
+		def dup() self.class.make(*arr) end
 
 		def charge
 			[arr[0] == 0 ? 0 : (arr[0] > 0 ? 1 : -1),
@@ -962,7 +891,7 @@ module Dimsome
 	# 			arr[1] == 0 ? 0 : arr[1]/arr[1].abs]
 		end
 
-		def self.make(*args) self.new(*args) end ### fix args!!! FIXME!!!
+		def self.make(*args) self.new(*args) end
 
 		def initialize(one=nil, two=nil)
 			pair = (one ? 
@@ -973,7 +902,6 @@ module Dimsome
 		end
 
 		def self.empty() self.new(0, 0) end
-# 		def self.empty() self.class.new(0, 0) end
 # 		def empty?() arr[0] == 0 && arr[1] == 0 end
 	# 	alias_method :zero, :empty
 		def self.zero() self.empty end
@@ -985,16 +913,6 @@ module Dimsome
 		include Point
 		include ModPoint
 	
-	# 	[:x, :y].each_with_index do |m, i|
-	# 		define_method(m){ arr[i] }
-	# 		define_method("#{m}="){|v| arr[i] = v }
-	# 	end
-
-# 		def x() arr[0] end
-# 		def x=(v) arr[0] = v end
-# 		def y() arr[1] end
-# 		def y=(v) arr[1] = v end
-
 		def x=(value) arr[0] = value end
 		def x(value=nil)
 			return arr[0] unless value
@@ -1006,9 +924,6 @@ module Dimsome
 			return arr[1] unless value
 			self.class.new([arr[0], value])
 		end
-	
-		# included arith
-		# included point-specific relatives
 	end
 end
 
@@ -1016,11 +931,6 @@ module Dimsome
 	class RubySize < RubyDim2d
 		include Size
 		include ModSize
-	
-# 		def w() arr[0] end
-# 		def w=(v) arr[0] = v end
-# 		def h() arr[1] end
-# 		def h=(v) arr[1] = v end
 	
 		def w=(value) arr[0] = value end
 		def w(value=nil)
@@ -1037,11 +947,7 @@ module Dimsome
 		alias_method :width, :w
 		alias_method :width=, :w=
 		alias_method :height, :h
-		alias_method :height=, :h=
-	
-		# included arith
-		# included size-specific relatives
-	
+		alias_method :height=, :h=	
 	end
 end
 
@@ -1061,7 +967,6 @@ module Dimsome
 	
 		def to_quad() to_ary.map{|e| e.to_ary}.flatten end
 		def to_pair_pair() to_ary.map{|e| e.to_ary} end
-		# to_pairs???
 		# to_a???
 		
 		### Rect doesn't extend Dim2d, so doesn't include ModArith, need ModRectArith...
@@ -1072,8 +977,6 @@ module Dimsome
 
 		# ModRectAccessors expects:
 		# to defeat Apple CGRect keeping neg size info...
-		def std() self.dup end
-		### how about we actually do it???
 		def std() 
 			x = (size.w < 0 ? origin.x + size.w : origin.x)
 			y = (size.h < 0 ? origin.y + size.h : origin.y)
@@ -1090,8 +993,8 @@ module Dimsome
 			# do we ever want to keep Point, Size passed in or always copy???
 			one, two = (args.empty? ? [[0, 0], [0, 0]] : strict_numeric_pair_pair(*args))
 			raise "#{self.class}#new bad args (#{args.inspect})" unless one && two #&& two redun
-			self.origin = RubyPoint.new(one)
-			self.size = RubySize.new(two)
+			self.origin = RubyPoint.make(one)
+			self.size = RubySize.make(two)
 		end
 
 		def self.empty() self.new(0, 0, 0, 0) end
@@ -1113,43 +1016,16 @@ end
 
 module Dimsome
 	module ArrayDimsPlus
-		### rough guess!!! FIXME!!
-		def dim() "go dim #{self.inspect}!!!" end
-		def dim2d() dimo(:dim2d) end #nec???
-		def dimp() dimo(:point) end
-		def dims() dimo(:size) end
-		def dimr() dimo(:rect) end
-		def dimo(type=:point)
-			case type
-			when :dim2d
-				RubyDim2d.new(*[self[0], self[1]]) #why this * and []... ???!!! FIXME!!!
-			when :size, :s
-				RubySize.new(*[self[0], self[1]])
-			when :rect, :r
-				flat = self.flatten # in case [[],[]]
-				RubyRect.new(*[flat[0], flat[1], flat[2], flat[3]]) ### pref construct??? FIXME!!!
-			else #:point
-				RubyPoint.new(*[self[0], self[1]])
-			end
-		end
+		def dim2d() Dimsome::RubyDim2d.make(*args) end
+		def dimp() Dimsome::RubyPoint.make(*args) end
+		def dims() Dimsome::RubySize.make(*args) end
+		def dimr() Dimsome::RubyRect.make(*args) end
 	
-		### from motion_ NSArray...
-# 		def cg() "go cg!!!" end
-# 		def cgp() cgo(:point) end
-# 		def cgs() cgo(:size) end
-# 		def cgr() cgo(:rect) end
-# 		def cgo(type=:point)
-# 			case type
-# 			when :size, :s
-# 				CGSizeMake(*[self[0], self[1]])
-# 			when :rect, :r
-# 				flat = self.flatten
-# 				CGRectMake(*[flat[0], flat[1], flat[2], flat[3]])
-# 			else #:point
-# 				CGPointMake(*[self[0], self[1]])
-# 			end
-# 		end
-	end #module ArrayDimsPlus
+		# alias cg methods, so we can copy-paste???
+		alias_method :cgp, :dimp
+		alias_method :cgs, :dims
+		alias_method :cgr, :dimr
+	end 
 end
 
 class Array
