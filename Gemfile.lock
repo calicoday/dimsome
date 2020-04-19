@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dimsome (0.2.0)
+    rake (13.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  dimsome
+  rake (>= 12.3.3)
+
+BUNDLED WITH
+   1.17.2

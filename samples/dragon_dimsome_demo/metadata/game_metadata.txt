@@ -1,0 +1,6 @@
+devid=calicoday
+devtitle=Calicoday
+gameid=dragon_dimsome_demo
+gametitle=Dragon Dimsome Demo
+version=0.1
+icon=metadata/icon.png
