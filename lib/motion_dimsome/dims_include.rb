@@ -30,12 +30,12 @@ class CGSize
 end
 
 class NSArray
-	def cgp() CGPoint.make(*args) end
-	def cgs() CGSize.make(*args) end
-	def cgr() CGRect.make(*args) end
+	def cgp() CGPoint.make(self) end
+	def cgs() CGSize.make(self) end
+	def cgr() CGRect.make(self) end
 
-	def dim2d() Dimsome::RubyDim2d.make(*args) end
-	def dimp() Dimsome::RubyPoint.make(*args) end
-	def dims() Dimsome::RubySize.make(*args) end
-	def dimr() Dimsome::RubyRect.make(*args) end
+	def dim2d() Dimsome::RubyDim2d.make(self) end
+	def dimp() Dimsome::RubyPoint.make(self) end
+	def dims() Dimsome::RubySize.make(self) end
+	def dimr() Dimsome::RubyRect.make(self) end
 end

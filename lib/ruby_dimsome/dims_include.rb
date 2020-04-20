@@ -3,10 +3,10 @@
 
 module Dimsome
 	module ArrayDimsPlus
-		def dim2d() Dimsome::RubyDim2d.make(*args) end
-		def dimp() Dimsome::RubyPoint.make(*args) end
-		def dims() Dimsome::RubySize.make(*args) end
-		def dimr() Dimsome::RubyRect.make(*args) end
+		def dim2d() Dimsome::RubyDim2d.make(self) end
+		def dimp() Dimsome::RubyPoint.make(self) end
+		def dims() Dimsome::RubySize.make(self) end
+		def dimr() Dimsome::RubyRect.make(self) end
 	
 		# alias cg methods, so we can copy-paste???
 		alias_method :cgp, :dimp
