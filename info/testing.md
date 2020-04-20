@@ -6,10 +6,10 @@ This first bit about Porkbelly is likely the only section of possible interest t
 
 I wanted to be able to run in DragonRuby-GTK the same test files I had already written for RubyMotion, so I created a testing module called Porkbelly by cobbling together only the most basic bits from various versions of Bacon/MacBacon (the testing module built into RubyMotion). The main differences between the original Bacon/MacBacon and Porkbelly are:
 - DragonRuby-GTK doesn't currently handle regexes, so no match predicate, restricting names or contexts, etc
-- Bacon didn't nest the output of nested contexts as MacBacon does so it wasn't matching my RubyMotion results
-- MacBacon gathers the top-level contexts into an array, then runs them (allowing scheduling, etc) but that was getting SystemStackError (stack too deep) in DragonRuby-GTK, so I simplified it for now.
+- Bacon didn't nest the output of nested contexts, so it wasn't matching my RubyMotion results
+- MacBacon gathers the top-level contexts into an array, then runs them (allowing scheduling, etc) but that was getting SystemStackError (stack too deep) in DragonRuby-GTK, so I simplified it for now. The tests are just run as they are read.
 
-Porkbelly.rb is in the dragon_dimsome/ directory you copy to your DragonRuby-GTK project. The sample/ project dragon_dimsome_demo shows the necessary `require`-ing. As for how to write the test _spec files, the [README for the original Bacon](https://github.com/leahneukirchen/bacon) is the best hint, though only the default output format is implemented and you may find some of the features don't work (besides those mentioned above). I haven't (intentionally) cut any other features but I've only run Dimsome tests and Bacon's 'Whirl-wind tour' thus far. Will do better. Soonish.
+Porkbelly.rb is in the dragon_dimsome/ directory that you copy to your DragonRuby-GTK project. The sample/ project dragon_dimsome_demo shows the necessary `require`-ing. As for how to write the test _spec files, the [README for the original Bacon](https://github.com/leahneukirchen/bacon) is the best hint, though only the default output format is implemented and you may find some of the features don't work (besides those mentioned above). I haven't (intentionally) cut any other features but I've only run Dimsome tests and Bacon's 'Whirl-wind tour' thus far. Will do better. Soonish.
 
 
 I'm keen to use Porkbelly to explore fleshing out the options/platforms with different modular architextures but right now, all it does for sure is give the same results for the tests I have.
@@ -41,7 +41,7 @@ $ ./dragonruby dragon_dimsome_demo --no-tick
 200 specifications (220 requirements), 6 failures, 0 errors
 ```
 
-just the 5 `to_ary` parallel assignment tests and the whirlwind_spec 'no superpowers'.
+just the 5 `to_ary` parallel assignment tests and the whirlwind_spec 'should have super powers' fail.
 
 
 ## RubyMotion and built-in MacBacon
@@ -49,19 +49,21 @@ just the 5 `to_ary` parallel assignment tests and the whirlwind_spec 'no superpo
 
 ### Results for OSX
 
+(with $test_cg_dims = true or false)
+
 ```ruby
 $ bundle exec rake spec
 [...]
 200 specifications (225 requirements), 1 failures, 0 errors
 ```
 
-just the whirlwind_spec 'no superpowers'.
+just the whirlwind_spec 'should have super powers' fails.
 
-same for $test_cg_dims = false
-200 specifications (225 requirements), 1 failures, 0 errors
 
 
 ### Results for IOS
+
+(with $test_cg_dims = true or false)
 
 ```ruby
 $ ios=true bundle exec rake spec 
@@ -69,10 +71,8 @@ $ ios=true bundle exec rake spec
 200 specifications (225 requirements), 1 failures, 0 errors
 ```
 
-just the whirlwind_spec 'no superpowers'.
+just the whirlwind_spec 'should have super powers' fails.
 
-same for $test_cg_dims = false
-200 specifications (225 requirements), 1 failures, 0 errors
 
 
 ## RubyMotion and Porkbelly
@@ -114,7 +114,7 @@ $ ruby dragon_dimsome/run_porkbelly.rb
 [...]
 200 specifications (225 requirements), 1 failures, 0 errors
 ```
-just the whirlwind_spec 'no superpowers'.
+just the whirlwind_spec 'should have super powers'.
 
 
 

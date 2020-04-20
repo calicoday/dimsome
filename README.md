@@ -1,27 +1,26 @@
 # Dimsome
 
-Tagline: A gem of 2d arithmetic methods for basic dimension classes in RubyMotion/Ruby/DragonRuby-GTK.
+Dimsome is a collection of 2d arithmetic convenience methods and classes, such Point or Rect. For use with RubyMotion targeting AppleOS (ios, macos, tvos, etc), the methods are added to the Foundation SDK types CGPoint (ATSPoint for macos), CGSize and CGRect.
 
-Dimsome is a collection of convenience methods for 2d arithmetic and the basic dimension classes, such Point or Rect, to which they are added. For use with RubyMotion targeting AppleOS (ios, macos, tvos, etc), the methods are added to the Foundation SDK types CGPoint (ATSPoint for macos), CGSize and CGRect.
-
-**Please note**: every part of the project (this Readme, docs, tests, organization, packaging) is in the rough, early stages. Most of the methods themselves I've been using in one way or another for well over a year but some garbling *may* have happened as I hacked things for different ruby platforms.
+**Please note**: much of the project is in the fairly early stages. Most of the methods themselves I've been using in one way or another for well over a year but some garbling may have happened as I hacked things for different ruby platforms.
 
 **Also**: heartfelt thanks to the author-contributors of the [Geomotion](https://rubygems.org/gems/geomotion/versions/0.15.0) gem ([github repo](https://github.com/clayallsopp/geomotion)). I had been picking at what became Dimsome for half a year before I stumbled on Geomotion. It's ios-only and I needed osx/bottom-left origin for SpriteKit work but it's a mature, working gem (with tests!) along very similar lines and gave me lots to play with while I settled what I really wanted. And in fact, ios-natural screen coordinates is something Dimsome (almost) totally doesn't do, so if that's what you need, go Geomotion.
 
 Included in this repo:
 - Dimsome code
-- gemspec and including code to build a gem for RubyMotion or Ruby
+- Gemspec to build a gem for RubyMotion or Ruby
 - (RubyMotion) basic ios and osx app code (ie Rakefile, AppDelegate, etc), for experimenting with Dimsome in the RubyMotion REPL
 - (DragonRuby-GTK) Ruby script dragonruby_cat.rb to cat the necessary Dimsome code plus tidbits into a single file for adding to DragonRuby-GTK projects (DragonRuby-GTK doesn't handle gems yet)
-- (DragonRuby-GTK) Porkbelly, a Bacon/MacBacon testing module derivative for running the test files in DragonRuby-GTK.
-- spec/ directory of test files to be run with RubyMotion's built-in MacBacon, rspec for Ruby, Porkbelly for DragonRuby-GTK.
+- (DragonRuby-GTK) Porkbelly, a Bacon/MacBacon testing module derivative for running the test files in DragonRuby-GTK. 
+- spec/ directory of test files to be run with RubyMotion's built-in Bacon, RSpec for Ruby, Porkbelly for DragonRuby-GTK (or Ruby, with run_porkbelly.rb, in the dragon_dimsome/ directory).
 - info/ directory of further documentation (setting doc/ aside currently, for exploring rdoc/yard generated docs)
+- samples/ directory containing dragon_dimsome_demo project for running the tests
 - LICENSE, this README.md
 
 Good to know:
 
 - Dimsome runs in RubyMotion for AppleOS (no Android yet), Ruby (ie MRI-ish) and DragonRuby-GTK (ie mruby-ish)
-- I'm overwhelmingly focussed on tools for sketching/experimenting, so Dimsome is not at all optimized for anything but easy typing. Could be later. We'll see.
+- I'm overwhelmingly focussed on tools for sketching/experimenting, so Dimsome is not at all optimized for anything but easy typing and reading. Could be later. We'll see.
 - all methods but the simplest setters return a new not modified object.
 - ALL coordinates are relative to a bottom-left origin, for all targets.
 - rect is sized-rect, not kitty-rect (which is to say, an origin point and a size, not origin and farpoint).
@@ -30,15 +29,14 @@ Good to know:
 - The name 'Dimsome' is just my shorthand for 'arithmetic for SOME DIMensionS'. In hindsight, I think it might've been a mistake because it sounds exactly like 'dimsum' and now arithmetic always makes me hungry. Sigh.
 
 
-
 Jump to topic: 
 - [Getting Started](getting-started)
 - [Initializers and Inspectors](initializers-and-inspectors)
 - [Classes Dim2d, Point, Size](simple-classes-dim2d-point-size-not-rect)
 - [Class Rect](compound-class-rect)
 - [Kludgey IOS-oriented methods](kludgey-ios-oriented-methods)
-- [API Cheatsheet](api_cheatsheet.md)
-- [Dimsome Testing](testing.md) and Porkbelly
+- [API Cheatsheet](info/api_cheatsheet.md)
+- [Dimsome Testing](info/testing.md) and Porkbelly
 - [To Do/Buglist](to-dobuglist)
 
 ## Installation
@@ -97,7 +95,7 @@ To use in DragonRuby-GTK, add in your main.rb:
 require 'dragon_dimsome/dragon_dimsome.rb'
 ```
 
-The sample/ project dragon_dimsome_demo is for running the test files (with the Porkbelly testing module) and shows the basic pattern.
+The samples/ project dragon_dimsome_demo is for running the test files (with the Porkbelly testing module) and shows the basic pattern.
 
 
 ## Getting Started
@@ -117,9 +115,9 @@ and for RubyMotion, the same methods are added to the built-in classes:
 	
 Dimsome works entirely around the idea of a 'numeric pair', which is basically a 2-member array, each member of which is nil or a Numeric. A 'strict numeric pair' doesn't contain any nils. A 'numeric pairable' is any object that has a `to_ary` method that returns a numeric pair (eg all Dimsome classes except Rect/CGRect) or is a Numeric (indicating the value for *each* member, so 3 becomes [3, 3]).
 	
-See [API Cheatsheet](api_cheatsheet.md) for a list of available methods. Some examples of the most useful bits follow.
+See [API Cheatsheet](info/api_cheatsheet.md) for a list of available methods. Some examples of the most useful bits follow below.
 
-See [Testing](testing.md) for how to run the spec/ files, and about Porkbelly, the testing module for use in DragonRuby-GTK.
+See [Testing](info/testing.md) for how to run the spec/ files, and about Porkbelly, the testing module for use in DragonRuby-GTK.
 
 ### Initializers and Inspectors
 
@@ -157,8 +155,6 @@ rect = CGRect.make(CGPoint.make(20, 30), CGSize.make(120, 80))
 => #<CGRect origin=#<ATSPoint x=20.0 y=30.0> size=#<CGSize width=120.0 height=80.0>>
 
 ```
-
-[snag: CGPoint.make won't work on osx, though CGPoint exists on osx. FIXME!!!]
 
 Alternatively, you can use the convenience methods `dim2d`, `dimp`, `dims` and `dimr` added to Array:
 
@@ -258,7 +254,7 @@ p.angle
 
 ```
 
-Basic binary operators/methods `+`, `-`, `*` and `/` take a single parameter, a Numeric or numeric pairable, and return a new object of the same class for chaining:
+Basic binary operators/methods `+`, `-`, `*` and `/` take a single numeric pairable and return a new object of the same class for chaining:
 
 ```ruby
 p = [3, 4].dimp
@@ -296,9 +292,7 @@ p.within_radius?(4)
 => false
 ```
 
-Specialized methods `left`, `right`, `up` and `down` (for Point) and `grow`, `shrink`, `wider`, `thinner`, `taller` and `shorter` (for Size) take only a Numeric and return a new object of the same class for chaining:
-
-[narrower!!!]
+Specialized methods `left`, `right`, `up` and `down` (for Point) and `grow`, `shrink`, `wider`/`thicker`, `narrower`/`thinner`, `taller` and `shorter` (for Size) take only a Numeric and return a new object of the same class for chaining:
 
 ```ruby
 p = [3, 4].dimp
@@ -318,8 +312,6 @@ s.taller(20).wider(20).shrink(15)
 ### Compound Class Rect
 
 Rect is a compound of 2 'numeric pairable' objects, a point `origin` (with x and y values) and a size `size` (with width and height values). 
-
-[to_ary, to_pair, to_pair_pair and starburst!!!]
 
 A 'waypoint' is a point some way into the Rect. :-) Which is a say, a point whose x and y values are between 0 and the Rect's width and height, respectively. A 'grip' is a point in the Rect in terms of the Rect's parent's coordinate system (ie a waypoint plus the Rect's origin). So moving a Rect by some amount will change the value of any grip by the same amount.
 
@@ -367,8 +359,7 @@ r
 => Dimsome::RubyRect([7, 30], [120, 80])
 ```
 
-[Rect ought to but doesn't currently take `+`, `-` for moving, `*`, `/` for scaling. FIXME!!!]
-
+(Note Rect ought to but doesn't currently take `+`, `-` for moving, `*`, `/` for scaling). 
 
 #### Rect relative methods
 
@@ -392,7 +383,7 @@ r.after(10)
 => Dimsome::RubyRect([150, 30], [120, 80])
 ```
 
-Methods `grow`, `shrink`, `wider`/`thicker`, `narrower`/`thinner`, `taller`, `shorter` take a Numeric amount and optional spread (default `[0, 0]`, so from the center) and create a new Rect with adjusted size and position adjusted according to the given spread:
+Methods `grow`, `shrink`, `wider`/`thicker`, `narrower`/`thinner`, `taller`, `shorter` take a Numeric amount and optional spread (default `[0, 0]`) and create a new Rect with adjusted size and position adjusted according to the given spread:
 	
 ```ruby
 r = [20, 30, 120, 80].dimr
