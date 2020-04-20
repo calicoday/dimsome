@@ -30,14 +30,14 @@ Good to know:
 
 
 Jump to topic: 
-- [Getting Started](getting-started)
-- [Initializers and Inspectors](initializers-and-inspectors)
-- [Classes Dim2d, Point, Size](simple-classes-dim2d-point-size-not-rect)
-- [Class Rect](compound-class-rect)
-- [Kludgey IOS-oriented methods](kludgey-ios-oriented-methods)
+- [Getting Started](#getting-started)
+- [Initializers and Inspectors](#initializers-and-inspectors)
+- [Classes Dim2d, Point, Size](#simple-classes-dim2d-point-size-not-rect)
+- [Class Rect](#compound-class-rect)
+- [Kludgey IOS-oriented methods](#kludgey-ios-oriented-methods)
 - [API Cheatsheet](info/api_cheatsheet.md)
 - [Dimsome Testing](info/testing.md) and Porkbelly
-- [To Do/Buglist](to-dobuglist)
+- [To Do/Buglist](#to-dobuglist)
 
 ## Installation
 
