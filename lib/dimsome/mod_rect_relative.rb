@@ -168,8 +168,8 @@ module Dimsome
 		end
 	# 	def outside(align=nil, further=nil)
 		def outside(*args)
-			align, args = HandyArgs.pull_first_object(Symbol, args)
-			align = center unless align
+# 			align, args = HandyArgs.pull_first_object(Symbol, args)
+# 			align = center unless align
 			# blah blah blah
 		end
 	

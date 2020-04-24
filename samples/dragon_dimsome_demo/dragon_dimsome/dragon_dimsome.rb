@@ -429,8 +429,8 @@ module Dimsome
 		end
 	# 	def outside(align=nil, further=nil)
 		def outside(*args)
-			align, args = HandyArgs.pull_first_object(Symbol, args)
-			align = center unless align
+# 			align, args = HandyArgs.pull_first_object(Symbol, args)
+# 			align = center unless align
 			# blah blah blah
 		end
 	
@@ -1016,10 +1016,10 @@ end
 
 module Dimsome
 	module ArrayDimsPlus
-		def dim2d() Dimsome::RubyDim2d.make(*args) end
-		def dimp() Dimsome::RubyPoint.make(*args) end
-		def dims() Dimsome::RubySize.make(*args) end
-		def dimr() Dimsome::RubyRect.make(*args) end
+		def dim2d() Dimsome::RubyDim2d.make(self) end
+		def dimp() Dimsome::RubyPoint.make(self) end
+		def dims() Dimsome::RubySize.make(self) end
+		def dimr() Dimsome::RubyRect.make(self) end
 	
 		# alias cg methods, so we can copy-paste???
 		alias_method :cgp, :dimp
